@@ -1,60 +1,76 @@
-import java.util.Random; //clase destina a crear numeros aleatorios
+import java.util.Random;  // Random para números aleatorios
+import java.util.Scanner; // 
 
 public class Proyecto {
     public static void main(String[] args) {
-        Random ale = new Random(); //se crea un objeto llamado ale 
+        Scanner sc = new Scanner(System.in); // objeto Scanner 
+        Random ale = new Random(); // Objeto Random números aleatorios
 
-        // Número aleatorio Hilo 1: 0 a 150 (generamos de manera general)
-        int numero1 = ale.nextInt(151); 
-        System.out.println("Número aleatorio Hilo 1: " + numero1);
+        // cuántos hilos crea lo digita
+        System.out.print("¿Cuántos hilos quieres crear? ");
+        int numHilos = sc.nextInt(); // Guarda
 
-        // Número aleatorio Hilo 2: 0 a 150 (generamos de manera general)
-        int numero2 = ale.nextInt(151); 
-        System.out.println("Número aleatorio Hilo 2: " + numero2);
+        // Repetimos
+        for (int i = 1; i <= numHilos; i++) {
+            System.out.println("\nConfiguración del Hilo " + i + ":");
 
-        //Runnable para Hilo 1
-        Runnable tarea1 = new Runnable() { 
-            @Override
-            public void run() { 
-                //solo suma si el numero está entre 0 y 100
-                if (numero1 >= 0 && numero1 <= 100) {
-                    int suma = 0; //se guarda la suma
-                    for (int i = 1; i <= numero1; i++) { //rango de 1 hasta numero1
-                        suma += i; //se acumula i en la variable suma
+            //  ingresa el rango de inicio y fin para este hilo
+            System.out.print("Ingresa el valor de inicio: ");
+            int inicio = sc.nextInt();
+
+            System.out.print("Ingresa el valor de fin: ");
+            int fin = sc.nextInt();
+
+            // Generamos un número aleatorio entre 0 y 150
+            int numero = ale.nextInt(151);
+            System.out.println("Número aleatorio generado para Hilo " + i + ": " + numero);
+
+            // Guardamos en variables finales para usarlas dentro del Runnable
+            int finalNumero = numero;
+            int finalInicio = inicio;
+            int finalFin = fin;
+
+            // Definimos la tarea que hará este hilo
+            Runnable tarea = new Runnable() {
+                @Override
+                public void run() {
+                    // número aleatorio está dentro del rango dado por el usuario
+                    if (finalNumero >= finalInicio && finalNumero <= finalFin) {
+                        int suma = 0;
+                        String operacion = ""; // Guardará la cadena con la suma progresiva
+
+                        // Calculamos la suma paso a paso
+                        for (int j = 1; j <= finalNumero; j++) {
+                            suma += j; // acumulamos el número
+                            if (j == 1) {
+                                operacion = "1";
+                            } else {
+                                operacion += " + " + j;
+                            }
+                            // Mostrar cada paso de la suma
+                            System.out.println(Thread.currentThread().getName() +
+                                    " → " + operacion + " = " + suma);
+                        }
+
+                        //  total
+                        System.out.println(Thread.currentThread().getName() +
+                                " terminó. Resultado final: " + suma);
+                    } else {
+                        // no está dentro del rango,no hace la suma
+                        System.out.println(Thread.currentThread().getName() +
+                                " no realiza la suma porque el número está fuera de " +
+                                finalInicio + "-" + finalFin);
                     }
-                    System.out.println(Thread.currentThread().getName() + 
-                    " terminó. La suma es: " + suma); //Thread.current devuelve el hilo que se esta ejecutando en esa tarea y con get obtiene el nombre del hilo
-                } else {
-                    System.out.println(Thread.currentThread().getName() + 
-                    " no realiza la suma porque el número está fuera de 0-100");
                 }
-            }
-        }; 
+            };
 
-        //Runnable para Hilo 2
-        Runnable tarea2 = new Runnable() {
-            @Override
-            public void run() {
-                //solo suma si el numero está entre 101 y 150
-                if (numero2 >= 101 && numero2 <= 150) {
-                    int suma = 0; //se guarda la suma
-                    for (int i = 1; i <= numero2; i++) { //rango de 1 hasta numero2
-                        suma += i; //se acumula i en la variable suma
-                    }
-                    System.out.println(Thread.currentThread().getName() + 
-                    " terminó. La suma es: " + suma);
-                } else {
-                    System.out.println(Thread.currentThread().getName() + 
-                    " no realiza la suma porque el número está fuera de 101-150");
-                }
-            }
-        }; 
+            // Creamos el hilo, tarea mas nombre
+            Thread hilo = new Thread(tarea, "Hilo " + i + " (" + inicio + "-" + fin + ")");
 
-        //Crear y lanzar los dos hilos
-        Thread hilo1 = new Thread(tarea1, "Hilo 1 (0-100)"); 
-        Thread hilo2 = new Thread(tarea2, "Hilo 2 (101-150)"); 
+            // ejecución del hilo
+            hilo.start();
+        }
 
-        hilo1.start(); //inicia Hilo 1
-        hilo2.start(); //inicia Hilo 2
-    } //fin main
-} //fin clase Proyecto
+        sc.close(); // 
+    }
+}
