@@ -113,7 +113,7 @@ public class Proceso implements Runnable { // IMPLEMENTA RUNNABLE PARA PODER EJE
                                 System.out.print("Ingrese una palabra (sin números): ");
                                 palabraC = sc.nextLine();
                                 if (!palabraC.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) { 
-                                    System.out.println("❌ Entrada inválida. Solo se permiten letras."); 
+                                    System.out.println("Entrada inválida. Solo se permiten letras."); 
                                 }
                             } while (!palabraC.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")); 
 
@@ -125,7 +125,7 @@ public class Proceso implements Runnable { // IMPLEMENTA RUNNABLE PARA PODER EJE
                                     vecesC = Integer.parseInt(entrada); // CONVIERTE A NÚMERO
                                     break; // SALE SI ES VÁLIDO
                                 } catch (NumberFormatException e) { 
-                                    System.out.println("❌ Entrada inválida. Debe ingresar un número."); 
+                                    System.out.println("Entrada inválida. Debe ingresar un número."); 
                                 }
                             }
                             cola.add(new Proceso("Mostrar Palabra N Veces", palabraC, vecesC)); // AGREGA EL PROCESO
@@ -177,4 +177,5 @@ public class Proceso implements Runnable { // IMPLEMENTA RUNNABLE PARA PODER EJE
         sc.close(); // CIERRA EL SCANNER
     }
 }
+
 
